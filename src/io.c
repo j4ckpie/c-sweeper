@@ -56,3 +56,19 @@ void save_scoreboard(char *filename, char *name, int score) {
     } else return;
 
 }
+
+// Print scoreboard
+void print_scoreboard(char *filename) {
+    FILE *file = fopen(filename, "r");
+
+    if(file == NULL) {
+        fprintf(stderr, "[!] Error when trying to save scoreboard!\n");
+        return;
+    }
+
+    // Read current scoreboard
+    printf("SCOREBOARD:\n");
+    while(fgets(buf, BUFSIZE, file) != NULL) {
+        printf("%s", buf);
+    }
+}
