@@ -1,8 +1,5 @@
-c-sweeper: src/main.o $(patsubst src/%.c, src/%.o, $(wildcard src/*.c))
-	gcc -Wall -Wextra -O2 -o c-sweeper src/main.o $(patsubst src/%.c, src/%.o, $(wildcard src/*.c))
-
-src/main.o: src/main.c
-	gcc -Wall -Wextra -O2 -c src/main.c -o src/main.o
+c-sweeper: $(patsubst src/%.c, src/%.o, $(wildcard src/*.c))
+	gcc -Wall -Wextra -O2 -o c-sweeper $(patsubst src/%.c, src/%.o, $(wildcard src/*.c))
 
 src/%.o: src/%.c
 	gcc -Wall -Wextra -O2 -c $< -o $@
