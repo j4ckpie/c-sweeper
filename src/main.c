@@ -3,7 +3,7 @@
 #include "io.h"
 
 int main(void) {
-    save_scoreboard("scoreboard.txt", "szef", 999);
+    save_current_score("all_scores.txt", "szef", 999);
     print_scoreboard("scoreboard.txt");
     return 0;
 }

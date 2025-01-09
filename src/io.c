@@ -51,6 +51,7 @@ void save_scoreboard(char *filename, char *name, int score) {
                 fprintf(file, "%d %s\n", players[i].score, players[i].name);
             }
         }
+        printf("[ ] Scoreboard updated successfully!\n");
         fclose(file);
         return;
     } else return;
@@ -62,7 +63,7 @@ void print_scoreboard(char *filename) {
     FILE *file = fopen(filename, "r");
 
     if(file == NULL) {
-        fprintf(stderr, "[!] Error when trying to save scoreboard!\n");
+        fprintf(stderr, "[!] Error when trying to print scoreboard!\n");
         return;
     }
 
@@ -72,6 +73,23 @@ void print_scoreboard(char *filename) {
         printf("%s", buf);
     }
     
+    fclose(file);
+    return;
+}
+
+// Save current score
+void save_current_score(char *filename, char *name, int score) {
+    FILE *file = fopen(filename, "a");
+
+    if(file == NULL) {
+        fprintf(stderr, "[!] Error when trying to save current score!\n");
+        return;
+    }
+
+    fprintf(file, "%d %s\n", score, name);
+    save_scoreboard("scoreboard.txt", name, score);
+    printf("[ ] Current score saved successfully!\n");
+
     fclose(file);
     return;
 }
