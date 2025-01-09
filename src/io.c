@@ -71,4 +71,7 @@ void print_scoreboard(char *filename) {
     while(fgets(buf, BUFSIZE, file) != NULL) {
         printf("%s", buf);
     }
+    
+    fclose(file);
+    return;
 }
