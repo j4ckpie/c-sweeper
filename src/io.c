@@ -87,7 +87,7 @@ void save_current_score(char *filename, char *name, int score) {
     }
 
     fprintf(file, "%d %s\n", score, name);
-    save_scoreboard("scoreboard.txt", name, score);
+    save_scoreboard("data/scoreboard.txt", name, score);
     printf("[ ] Current score saved successfully!\n");
 
     fclose(file);
