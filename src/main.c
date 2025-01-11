@@ -1,9 +1,8 @@
 #include <stdio.h>
 
-#include "io.h"
+#include "game_controller.h"
 
 int main(void) {
-    save_current_score("all_scores.txt", "szef", 999);
-    print_scoreboard("scoreboard.txt");
+    new_game();
     return 0;
 }
