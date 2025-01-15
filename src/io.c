@@ -30,7 +30,6 @@ void save_scoreboard(char *filename, char *name, int score) {
     }
 
     fclose(file);
-
     // Add new player if score is high enough and save
     if(players[lines].score < score) {
         players[lines].score = score;
@@ -92,4 +91,11 @@ void save_current_score(char *filename, char *name, int score) {
 
     fclose(file);
     return;
+}
+
+void ask_for_nickname(int score) {
+    char name[256];
+    printf("\nEnter your name: ");
+    scanf("%s", name);
+    save_current_score("data/all_scores.txt", name, score + 1);
 }
