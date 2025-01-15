@@ -112,32 +112,6 @@ void flag_cell(Board* b, int x, int y) {
     }
 }
 
-// Funkcja do wypisywania planszy
-void print_board(Board* b) {
-    printf("TURN: %d\n", b->turn);
-    printf("SCORE: %d\n", b->score);
-    for (int i = 0; i < b->rows; i++) {
-        if(i == 0){
-            printf(" ");
-            for (int j = 0; j < b->cols; j++) printf("  %d ", j);
-            printf("\n");
-        }
-        for (int j = 0; j < b->cols; j++) {
-            if(j == 0) printf("%d ", i);
-            if (b->board[i][j].state == CLOSED) {
-                printf("[ ] ");
-            } else if (b->board[i][j].state == FLAGGED) {
-                printf("[F] ");
-            } else if (b->board[i][j].is_mine) {
-                printf("[*] ");
-            } else {
-                printf("[%d] ", b->board[i][j].surrounding_mines);
-            }
-        }
-        printf("\n");
-    }
-}
-
 int is_game_won(Board *board) {
     int revealed_count = 0;
     for (int i = 0; i < board->rows; i++) {
