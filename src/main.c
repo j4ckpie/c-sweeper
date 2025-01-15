@@ -3,6 +3,6 @@
 #include "game_controller.h"
 
 int main(void) {
-    new_game();
+    game();
     return 0;
 }
