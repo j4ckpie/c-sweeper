@@ -4,7 +4,7 @@
 #include "board.h"
 
 // Funkcja do inicjalizacji planszy
-void init_board(Board* b, int rows, int cols, int mines, int difficulty) {
+void init_board(Board* b, int rows, int cols, int mines, int difficulty, int mode) {
     b->rows = rows;
     b->cols = cols;
     b->total_mines = mines;
@@ -23,8 +23,10 @@ void init_board(Board* b, int rows, int cols, int mines, int difficulty) {
         }
     }
 
-    generate_mines(b);
-    calculate_surrounding_mines(b);
+    if(mode != 1) {
+        generate_mines(b);
+        calculate_surrounding_mines(b);
+    }
 }
 
 // Funkcja do generowania min na planszy
@@ -42,6 +44,11 @@ void generate_mines(Board* b) {
             mines_placed++;
         }
     }
+}
+
+// Funkcja do ustawiania manualnie min - wejscie z pliku
+void set_mine(Board* b, int x, int y) {
+    b->board[y][x].is_mine = true;
 }
 
 // Funkcja do obliczania liczby min wokół każdego pola

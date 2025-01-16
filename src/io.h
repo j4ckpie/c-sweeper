@@ -1,6 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
+#include "board.h"
+
 void save_scoreboard(char *filename, char *name, int score);
 
 void print_scoreboard(char *filename);
