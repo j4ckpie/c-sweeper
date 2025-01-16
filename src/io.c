@@ -94,6 +94,7 @@ void save_current_score(char *filename, char *name, int score) {
     return;
 }
 
+// Get nickname input from the user
 void ask_for_nickname(int score) {
     char name[256];
     printf("\nEnter your name: ");
@@ -101,10 +102,12 @@ void ask_for_nickname(int score) {
     save_current_score("data/all_scores.txt", name, score + 1);
 }
 
+// Function to print available game modes
 void print_modes() {
     printf("PLEASE CHOOSE THE GAME MODE:\n1) EASY MODE [9x9, 10 MINES]\n2) MEDIUM MODE [16x16, 40 MINES]\n3) HARD MODE [16x30, 99 MINES]\n4) CUSTOM BOARD\n5) SHOW SCOREBOARD\n6) QUIT GAME\n");
 }
 
+// Function to print game logo at the beginning
 void print_logo() {
     char *logo[5] = {
         "   ___         _____      _____ ___ ___ ___ ___ ",

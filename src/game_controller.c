@@ -8,11 +8,13 @@
 #define BUFSIZE 8192
 
 void game(char *file_path) {
+
     int mode;
     int rows;
     int columns;
     int mines;
     int difficulty;
+    
     if(file_path == NULL) {
         // Keyboard input
         while(1){
@@ -84,7 +86,9 @@ void game(char *file_path) {
             print_board(&board);    
 
             char command[256];
-            int x, y;   
+            int x, y;
+
+            // Game loop 
             while(1) {
                 printf("\nEnter command: ");
                 if(scanf("%s %d %d", command, &x, &y) != 3) {
@@ -92,6 +96,7 @@ void game(char *file_path) {
                     continue;
                 }
 
+                // Check the input
                 if (strcmp(command, "f") == 0) {
                     flag_cell(&board, x, y);
                 } else if (strcmp(command, "r") == 0) {
@@ -103,6 +108,7 @@ void game(char *file_path) {
                 
                 print_board(&board);
 
+                // Check whether the game is lost or won
                 if (is_game_lost(&board)) {
                     printf("[!] GAME OVER! You hit a mine.\n");
                     printf("[!] FINAL SCORE: %d\n", board.score);

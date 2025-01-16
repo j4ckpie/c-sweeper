@@ -7,6 +7,7 @@ int main(int argc, char **argv) {
     int opt;
     char *file_path = NULL;
 
+    // Get and handle command-line arguments
     while((opt = getopt(argc, argv, "f:")) != -1) {
         switch(opt) {
             case 'f':
@@ -15,6 +16,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    // Start game
     game(file_path);
     
     return 0;
