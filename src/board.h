@@ -25,9 +25,10 @@ typedef struct {
     int difficulty, turn, score;
 } Board;
 
-void init_board(Board* b, int rows, int cols, int mines, int difficulty);
+void init_board(Board* b, int rows, int cols, int mines, int difficulty, int mode);
 void print_board(Board* b);
 void generate_mines(Board* b);
+void set_mine(Board* b, int x, int y);
 void calculate_surrounding_mines(Board* b);
 int open_cell(Board* b, int x, int y, bool firstclick);
 void flag_cell(Board* b, int x, int y);
