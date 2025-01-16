@@ -58,11 +58,17 @@ void game(char *file_path) {
                     break;
                 case 4:
                     printf("Enter custom rows: ");
-                    scanf("%d", &rows);
+                    if(scanf("%d", &rows) != 1) {
+                        fprintf(stderr, "[!] Invalid row number!\n");
+                    }
                     printf("Enter custom columns: ");
-                    scanf("%d", &columns);
+                    if(scanf("%d", &columns) != 1) {
+                        fprintf(stderr, "[!] Invalid column number!\n");
+                    }
                     printf("Enter number of mines: ");
-                    scanf("%d", &mines);
+                    if(scanf("%d", &mines) != 1) {
+                        fprintf(stderr, "[!] Invalid mine number!\n");
+                    }
                     difficulty = 0;
                     break;
                 case 5:
@@ -217,7 +223,7 @@ void game(char *file_path) {
                 } else if(y < 0 || y > columns) {
                     fprintf(stderr, "[!] Invalid Y value! Ending the script...\n");
                     goto end_program;
-                } else if(command[0] != 'f' && command[0] != 'r') {
+                } else if(strcmp(command, "f") != 0 && strcmp(command, "r") != 0) {
                     fprintf(stderr, "[!] Invalid input syntax! Ending the script...\n");
                     goto end_program;
                 }
