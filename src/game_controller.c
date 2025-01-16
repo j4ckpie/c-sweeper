@@ -186,21 +186,35 @@ void game(char *file_path) {
                 for(int i = 0; i < columns; i++) {
                     // Set mines
                     if(tmp[i] == '*') {
-                        set_mine(&board, i, j);
+                        set_mine(&board, j, i);
                     }
                 }
                 j++;
             } else if(is_board == 0) {
                 calculate_surrounding_mines(&board);
-                command[0] = tmp[0];
-                x = (int)tmp[2] - (int)'0';
-                y = (int)tmp[4] - (int)'0';
+
+                // Split the input into 3 variables
+                char *token;
+                char *tokens[3];
+                token = strtok(tmp, " ");
+
+                int k = 0;
+                while(token != NULL && k < 3) {
+                    tokens[k] = token;
+                    token = strtok(NULL, " ");
+                    k++;
+                }
+
+                // Cast the token values
+                strcpy(command, tokens[0]);
+                x = atoi(tokens[1]);
+                y = atoi(tokens[2]);
 
                 // Check if input is correct
-                if(x < 0 || x > columns) {
+                if(x < 0 || x > rows) {
                     fprintf(stderr, "[!] Invalid X value! Ending the script...\n");
                     goto end_program;
-                } else if(y < 0 || y > rows) {
+                } else if(y < 0 || y > columns) {
                     fprintf(stderr, "[!] Invalid Y value! Ending the script...\n");
                     goto end_program;
                 } else if(command[0] != 'f' && command[0] != 'r') {

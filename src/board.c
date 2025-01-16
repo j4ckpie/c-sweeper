@@ -48,7 +48,7 @@ void generate_mines(Board* b) {
 
 // Funkcja do ustawiania manualnie min - wejscie z pliku
 void set_mine(Board* b, int x, int y) {
-    b->board[y][x].is_mine = true;
+    b->board[x][y].is_mine = true;
 }
 
 // Funkcja do obliczania liczby min wokół każdego pola
