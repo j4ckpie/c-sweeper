@@ -99,7 +99,7 @@ void ask_for_nickname(int score) {
     char name[256];
     printf("\nEnter your name: ");
     scanf("%s", name);
-    save_current_score("data/all_scores.txt", name, score + 1);
+    save_current_score("data/all_scores.txt", name, score);
 }
 
 // Function to print available game modes
@@ -126,26 +126,44 @@ void print_logo() {
     printf("            MINESWEEPER INSPIRED GAME.\n");
 }
 
-// Funkcja do wypisywania planszy
+// Function to calculate the width needed to display a number
+int get_number_width(int number) {
+    int res = 0;
+    if(number == 0) return 1;
+    while(number > 0){
+        res++;
+        number /= 10;
+    }
+    return res;
+}
+
+// Function to print current board
 void print_board(Board* b) {
+    int max_row_width = get_number_width(b->rows - 1); // Width for row indices
+    int cell_width = 4; // Width for each cell (adjustable)
+    
     printf("TURN: %d\n", b->turn);
     printf("SCORE: %d\n", b->score);
+
+    // Print column headers with proper alignment
+    printf("%*s", max_row_width + 1, ""); // Space for row indices
+    for (int j = 0; j < b->cols; j++) {
+        printf("%*d ", cell_width, j);
+    }
+    printf("\n");
+
+    // Print rows with row headers and aligned cells
     for (int i = 0; i < b->rows; i++) {
-        if(i == 0){
-            printf(" ");
-            for (int j = 0; j < b->cols; j++) printf("  %d ", j);
-            printf("\n");
-        }
+        printf("%*d ", max_row_width, i); // Row index
         for (int j = 0; j < b->cols; j++) {
-            if(j == 0) printf("%d ", i);
             if (b->board[i][j].state == CLOSED) {
-                printf("[ ] ");
+                printf("%*s ", cell_width, "[ ]");
             } else if (b->board[i][j].state == FLAGGED) {
-                printf("[F] ");
+                printf("%*s ", cell_width, "[F]");
             } else if (b->board[i][j].is_mine) {
-                printf("[*] ");
+                printf("%*s ", cell_width, "[*]");
             } else {
-                printf("[%d] ", b->board[i][j].surrounding_mines);
+                printf("[%*d] ", cell_width - 2, b->board[i][j].surrounding_mines); // Aligning number in cell
             }
         }
         printf("\n");

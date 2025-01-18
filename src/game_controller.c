@@ -60,18 +60,43 @@ void game(char *file_path) {
                     break;
                 case 4:
                     printf("Enter custom rows: ");
-                    if(scanf("%d", &rows) != 1) {
-                        fprintf(stderr, "[!] Invalid row number!\n");
+                    while (1) {
+                        if (scanf("%d", &rows) != 1 || rows <= 0) {
+                            fprintf(stderr, "[!] Invalid row number! Please enter a positive integer.\n");
+                            while (getchar() != '\n'); // Clear input buffer
+                            printf("Enter custom rows: ");
+                        } else {
+                            while (getchar() != '\n'); // Clear any remaining input
+                            break;
+                        }
                     }
+
                     printf("Enter custom columns: ");
-                    if(scanf("%d", &columns) != 1) {
-                        fprintf(stderr, "[!] Invalid column number!\n");
+                    while (1) {
+                        if (scanf("%d", &columns) != 1 || columns <= 0) {
+                            fprintf(stderr, "[!] Invalid column number! Please enter a positive integer.\n");
+                            while (getchar() != '\n'); // Clear input buffer
+                            printf("Enter custom columns: ");
+                        } else {
+                            while (getchar() != '\n'); // Clear any remaining input
+                            break;
+                        }
                     }
+
                     printf("Enter number of mines: ");
-                    if(scanf("%d", &mines) != 1) {
-                        fprintf(stderr, "[!] Invalid mine number!\n");
+                    while (1) {
+                        if (scanf("%d", &mines) != 1 || mines <= 0 || mines >= rows * columns) {
+                            fprintf(stderr, "[!] Invalid number of mines! Please enter a positive integer less than the total number of cells (%d).\n", rows * columns);
+                            while (getchar() != '\n'); // Clear input buffer
+                            printf("Enter number of mines: ");
+                        } else {
+                            while (getchar() != '\n'); // Clear any remaining input
+                            break;
+                        }
                     }
+
                     difficulty = 0;
+
                     break;
                 case 5:
                     printf("\n");
@@ -85,7 +110,7 @@ void game(char *file_path) {
             printf("\nGAME STARTED!\n");
             print_board(&board);    
 
-            char command[256];
+            char command[BUFSIZE];
             int x, y;
 
             // Game loop 
@@ -100,7 +125,7 @@ void game(char *file_path) {
                 if (strcmp(command, "f") == 0) {
                     flag_cell(&board, x, y);
                 } else if (strcmp(command, "r") == 0) {
-                    board.score += board.difficulty * open_cell(&board, x, y, board.turn == 0);
+                    board.score += board.difficulty * open_cell(&board, x, y, board.turn == 0, false);
                 } else {
                     printf("[!] Invalid command.\n");
                     continue;
@@ -238,7 +263,7 @@ void game(char *file_path) {
                 if (strcmp(command, "f") == 0) {
                     flag_cell(&board, x, y);
                 } else if (strcmp(command, "r") == 0) {
-                    board.score += board.difficulty * open_cell(&board, x, y, 0);
+                    board.score += board.difficulty * open_cell(&board, x, y, board.turn == 0, false);
                 } else {
                     printf("[!] Invalid command.\n");
                     continue;
