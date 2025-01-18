@@ -249,14 +249,14 @@ void game(char *file_path) {
 
                 // Check if input is correct
                 if(x < 0 || x > rows) {
-                    fprintf(stderr, "[!] Invalid X value! Ending the script...\n");
-                    goto end_program;
+                    fprintf(stderr, "[!] Invalid X value! Skipping this move...\n");
+                    goto skip_input;
                 } else if(y < 0 || y > columns) {
-                    fprintf(stderr, "[!] Invalid Y value! Ending the script...\n");
-                    goto end_program;
+                    fprintf(stderr, "[!] Invalid Y value! skipping this move...\n");
+                    goto skip_input;
                 } else if(strcmp(command, "f") != 0 && strcmp(command, "r") != 0) {
-                    fprintf(stderr, "[!] Invalid input syntax! Ending the script...\n");
-                    goto end_program;
+                    fprintf(stderr, "[!] Invalid input syntax! Skipping the move...\n");
+                    goto skip_input;
                 }
 
                 // Play the move
@@ -269,6 +269,9 @@ void game(char *file_path) {
                     continue;
                 }
 
+                board.turn++;
+                skip_input:;
+
                 // Check whether the game is lost or won
                 if (is_game_lost(&board)) {
                     printf("[ ] Ending move sequence!\nMOVES: %d | POINTS: %d | SUCCESS: %d\n", board.turn, board.score, 0);
@@ -279,7 +282,6 @@ void game(char *file_path) {
                     printf("[ ] Ending move sequence!\nMOVES: %d | POINTS: %d | SUCCESS: %d\n", board.turn, board.score, 1);
                     goto end_program;
                 }
-                board.turn++;
             }
         }   
     }
