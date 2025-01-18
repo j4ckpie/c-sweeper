@@ -3,7 +3,7 @@
 #include <time.h>
 #include "board.h"
 
-// Funkcja do inicjalizacji planszy
+// Function to initialize the board
 void init_board(Board* b, int rows, int cols, int mines, int difficulty, int mode) {
     b->rows = rows;
     b->cols = cols;
@@ -12,7 +12,7 @@ void init_board(Board* b, int rows, int cols, int mines, int difficulty, int mod
     b->score = 0;
     b->turn = 0;
 
-    // Inicjalizacja wszystkich pól jako zamknięte, brak min
+    // Initialization of all fields as closed, no mines
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             b->board[i][j].x = i;
@@ -29,7 +29,7 @@ void init_board(Board* b, int rows, int cols, int mines, int difficulty, int mod
     }
 }
 
-// Funkcja do generowania min na planszy
+// Function for generating mines on the board
 void generate_mines(Board* b) {
     srand(time(NULL));
 
@@ -38,7 +38,7 @@ void generate_mines(Board* b) {
         int x = rand() % b->rows;
         int y = rand() % b->cols;
 
-        // Sprawdzanie, czy nie ma już miny na tym polu
+        // Checking if there are no mines in this field
         if (!b->board[x][y].is_mine) {
             b->board[x][y].is_mine = true;
             mines_placed++;
@@ -46,12 +46,12 @@ void generate_mines(Board* b) {
     }
 }
 
-// Funkcja do ustawiania manualnie min - wejscie z pliku
+// Function for setting the mines manually - input from a file
 void set_mine(Board* b, int x, int y) {
     b->board[x][y].is_mine = true;
 }
 
-// Funkcja do obliczania liczby min wokół każdego pola
+// Function to calculate the number of mines around each field
 void calculate_surrounding_mines(Board* b) {
     int dirs[8][2] = { {-1, -1}, {-1, 0}, {-1, 1},
                        {0, -1},          {0, 1},
@@ -74,15 +74,18 @@ void calculate_surrounding_mines(Board* b) {
     }
 }
 
-// Funkcja do odsłaniania pola
-int open_cell(Board* b, int x, int y, bool firstclick) {
+// Function to reveal the cell
+int open_cell(Board* b, int x, int y, bool firstclick, bool alreadylost) {
+    if(0 > x || x >= b->rows || 0 > y || y >= b->cols){
+        fprintf(stderr, "[!] Invalid input\n");
+        return 0;
+    }
     if (b->board[x][y].state != CLOSED) return 0;
     if (b->board[x][y].is_mine && firstclick){
         while (1) {
             int potx = rand() % b->rows;
             int poty = rand() % b->cols;
 
-            // Sprawdzanie, czy nie ma już miny na tym polu
             if (!b->board[potx][poty].is_mine) {
                 b->board[potx][poty].is_mine = true;
                 break;
@@ -91,10 +94,10 @@ int open_cell(Board* b, int x, int y, bool firstclick) {
         b->board[x][y].is_mine = false;
         calculate_surrounding_mines(b);
     }
+    if(b->board[x][y].is_mine) alreadylost = true;
     b->board[x][y].state = OPEN;
     int cnt = !b->board[x][y].is_mine;
-    // Jeśli pole jest puste (brak min w sąsiedztwie), odkrywamy sąsiadujące pola
-    if (b->board[x][y].surrounding_mines == 0) {
+    if ((b->board[x][y].surrounding_mines == 0 && !b->board[x][y].is_mine) || alreadylost) {
         int dirs[8][2] = { {-1, -1}, {-1, 0}, {-1, 1},
                            {0, -1},          {0, 1},
                            {1, -1}, {1, 0}, {1, 1} };
@@ -103,15 +106,19 @@ int open_cell(Board* b, int x, int y, bool firstclick) {
             int nx = x + dirs[i][0];
             int ny = y + dirs[i][1];
             if (nx >= 0 && ny >= 0 && nx < b->rows && ny < b->cols) {
-                cnt += open_cell(b, nx, ny, false);
+                cnt += open_cell(b, nx, ny, false, alreadylost);
             }
         }
     }
-    return cnt;
+    return (alreadylost ? 0 : cnt);
 }
 
-// Funkcja do flagowania pola
+// Function to flag a cell
 void flag_cell(Board* b, int x, int y) {
+    if(0 > x || x >= b->rows || 0 > y || y >= b->cols){
+        fprintf(stderr, "[!] Invalid input\n");
+        return;
+    }
     if (b->board[x][y].state == CLOSED) {
         b->board[x][y].state = FLAGGED;
     } else if (b->board[x][y].state == FLAGGED) {
@@ -119,19 +126,23 @@ void flag_cell(Board* b, int x, int y) {
     }
 }
 
+// Function to check whether the game is won
 int is_game_won(Board *board) {
-    int revealed_count = 0;
+    int flagsonminescnt = 0;
+    int revealdcnt = 0;
     for (int i = 0; i < board->rows; i++) {
         for (int j = 0; j < board->cols; j++) {
-            if (board->board[i][j].state == OPEN || board->board[i][j].state == FLAGGED) {
-                revealed_count++;
+            if (board->board[i][j].state == FLAGGED && board->board[i][j].is_mine) {
+                flagsonminescnt++;
             }
+            if(board->board[i][j].state == OPEN) revealdcnt++;
         }
     }
 
-    return revealed_count == (board->rows * board->cols - board->total_mines);
+    return ((flagsonminescnt == board->total_mines) || revealdcnt == (board->rows * board->cols - board->total_mines));
 }
 
+// Function to check whether the game is lost
 int is_game_lost(Board *board) {
     for (int i = 0; i < board->rows; i++) {
         for (int j = 0; j < board->cols; j++) {

@@ -17,4 +17,6 @@ void print_logo();
 
 void print_board(Board* b);
 
+int get_number_width(int number);
+
 #endif
